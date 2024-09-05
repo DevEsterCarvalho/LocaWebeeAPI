@@ -1,7 +1,11 @@
-﻿namespace LocaWebee.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace LocaWebee.Models
 {
     public class Usuario
     {
+        [Key]
+        public int Id { get; set; }
         public string Nome { get; set; }
     }
 }
