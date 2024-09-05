@@ -1,0 +1,6 @@
+@LocaWebee_HostAddress = http://localhost:5219
+
+GET {{LocaWebee_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
