@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using LocaWebee.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace LocaWebee.Models
 {
@@ -7,5 +8,9 @@ namespace LocaWebee.Models
         [Key]
         public int Id { get; set; }
         public string Nome { get; set; }
+
+        public string Email { get; set; }
+
+        public EnumTema Tema { get; set; }
     }
 }
