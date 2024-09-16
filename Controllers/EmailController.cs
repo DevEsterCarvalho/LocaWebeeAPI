@@ -10,6 +10,22 @@ namespace LocaWebee.Controllers
     [Route("[controller]")]
     public class EmailController : ControllerBase
     {
+        private static readonly TimeSpan Tempo = TimeSpan.FromHours(1);
+        private static readonly int MaxEmails = 50;
+
+        private bool PodeEnviarEmail(int usuarioId, AppDbContext context)
+        {
+            var agora = DateTime.UtcNow;
+            var inicioPeriodo = agora - Tempo;
+
+            var emailsEnviados = context.Emails
+                                        .Where(e => e.RemetenteId == usuarioId && e.DataEnvio >= inicioPeriodo)
+                                        .Count();
+
+            return emailsEnviados < MaxEmails;
+        }
+
+
         [HttpPost("EnviarEmail")]
         public IActionResult EnviarEmail([FromBody] EnvioEmail envioEmail)
         {
@@ -20,6 +36,11 @@ namespace LocaWebee.Controllers
             if (remetente == null)
             {
                 return NotFound("Remetente não encontrado");
+            }
+
+            if (!PodeEnviarEmail(remetente.Id, context))
+            {
+                return BadRequest("Limite de e-mails atingido. Tente novamente mais tarde.");
             }
 
             var destinatario = context.Usuarios.FirstOrDefault(u => u.Email == envioEmail.DestinatarioEmail);
@@ -35,6 +56,7 @@ namespace LocaWebee.Controllers
                 DestinatarioId = destinatario.Id,
                 Assunto = envioEmail.Assunto,
                 Corpo = envioEmail.Corpo,
+                DataEnvio = DateTime.UtcNow
             };
 
             context.Add(email);

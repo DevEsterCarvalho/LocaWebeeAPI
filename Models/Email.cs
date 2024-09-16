@@ -10,6 +10,7 @@ namespace LocaWebee.Models
         public int DestinatarioId { get; set; }
         public string Assunto { get; set; }
         public string Corpo { get; set; }
+        public DateTime DataEnvio { get; set; }
 
         public virtual Usuario Remetente { get; set; }
         public virtual Usuario Destinatario { get; set; }
