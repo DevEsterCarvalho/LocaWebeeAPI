@@ -12,9 +12,9 @@ namespace LocaWebee.Controllers
     {
         private static readonly TimeSpan Tempo = TimeSpan.FromHours(1);
         private static readonly int MaxEmails = 50;
-
+        //controle spam por quantidade de e-mail enviados
         private bool PodeEnviarEmail(int usuarioId, AppDbContext context)
-        {
+        { 
             var agora = DateTime.UtcNow;
             var inicioPeriodo = agora - Tempo;
 
@@ -31,7 +31,7 @@ namespace LocaWebee.Controllers
         {
             using var context = new AppDbContext();
 
-            var remetente = context.Usuarios.FirstOrDefault(u => u.Email == envioEmail.RemetenteEmail);
+            var remetente = context.Usuarios.FirstOrDefault(u => u.Email == envioEmail.RemetenteEmail.Trim());
 
             if (remetente == null)
             {
@@ -43,7 +43,7 @@ namespace LocaWebee.Controllers
                 return BadRequest("Limite de e-mails atingido. Tente novamente mais tarde.");
             }
 
-            var destinatario = context.Usuarios.FirstOrDefault(u => u.Email == envioEmail.DestinatarioEmail);
+            var destinatario = context.Usuarios.FirstOrDefault(u => u.Email == envioEmail.DestinatarioEmail.Trim());
 
             if (destinatario == null)
             {
@@ -61,6 +61,7 @@ namespace LocaWebee.Controllers
 
             context.Add(email);
             context.SaveChanges();
+            var response = new { Mensagem = "Email enviado com sucesso!" };
             return Ok("Email enviado com sucesso!");
 
         }

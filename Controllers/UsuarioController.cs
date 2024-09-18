@@ -41,6 +41,8 @@ namespace LocaWebee.Controllers
             }
 
             verificarUsuarioExistente.Nome = usuarioAtualizado.Nome;
+            verificarUsuarioExistente.Email = usuarioAtualizado.Email;
+            verificarUsuarioExistente.Tema = usuarioAtualizado.Tema;
 
             context.Update(verificarUsuarioExistente);
             context.SaveChanges();
